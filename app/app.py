@@ -14,10 +14,10 @@ from sklearn.ensemble import RandomForestClassifier
 from os.path import dirname, join, abspath
 sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 
-X_train, y_train, X_val, y_val = get_training_data()
 
+X_train, y_train, X_val, y_val = get_training_data()
 st.write("""
-# Dự đoán rủi ro về khả năng tử vong của bệnh nhân trong 10 năm
+# DỰ ĐOÁN KHẢ NĂNG BỆNH NHÂN CÓ NGUY CƠ BỊ ĐỘT QUỴ
 """)
 
 classifier_name = st.sidebar.selectbox(
@@ -37,17 +37,15 @@ def add_parameter(clf_name):
     params = dict()
     if clf_name == '':
         st.write("""
-Trong những thập kỷ gần đây, với sự phát triển nhanh chóng của việc số hóa dữ liệu, lượng dữ liệu điện tử trong lĩnh vực y tế đã tăng hơn 300 lần từ 130 exabytes (năm 2005) lên 40,000 exabytes (năm 2020). Cùng với sự phát triển vượt bậc của công nghệ và các nghiên cứu về khai phá, phân tích và xây dựng tri thức đã giúp những chuyên gia và các y bác sĩ có nhận định chính xác hơn trong việc chẩn đoán và chăm sóc bệnh nhân. Những ứng dụng trong đời sống hiện nay có thể kể đến như: sử dụng tri thức khai phá để đưa ra quyết định lâm sàng; chẩn đoán mối đe dọa nghiêm trọng đối với chất lượng và an toàn trong chăm sóc sức khỏe; phân tích hồ sơ và quản lý khám, chữa bệnh của bệnh nhân.
-
-Bên cạnh đó, sự thay đổi về môi trường sống của con người cũng đang có nhiều ảnh hưởng lớn đến sức khỏe trong tương lai của chính mỗi người chúng ta. Chính vì vậy, việc đưa ra dự đoán về khả năng bệnh tật hay rủi ro trong tương lai của con người có thể giúp chúng ta cải thiện hơn về mặt sức khỏe và đời sống. Do đó, trong đồ án môn học này, đề tài được khai phá và xây dựng cơ sở tri thức về “Dự đoán rủi ro về khả năng tử vong của bệnh nhân trong 10 năm tới” bằng các phương pháp học máy như cây quyết định (Decision Tree) và rừng ngẫu nhiên (Random Forest).
+Theo Tổ chức Y tế Thế giới (WHO) đột quỵ là nguyên nhân gây Đột quỵ thứ 2 trên toàn cầu, chiếm khoảng 11% tổng số ca Đột quỵ[1]. Bệnh đột quỵ thường xảy ra đột ngột và khó có thể kiểm soát nên gây rất nhiều khó khăn cho người nhà bệnh nhân và các y bác sĩ. Chính vì vậy bọn em xin đề xuất một hệ thống “Dự đoán khả năng bệnh nhân có nguy cơ bị đột quỵ “ bằng các phương pháp học máy như cây quyết định (Decision Tree) [2] và rừng ngẫu nhiên (Random Forest) [3]. Chức năng chính của bọn em là sử dụng dữ liệu quá khứ của bệnh nhân bị đột quỵ để dự đoán liệu một bệnh nhân có khả năng bị đột quỵ hay không dựa trên các thông số đầu vào như giới tính, tuổi tác, các bệnh khác nhau và tình trạng hút thuốc. Mỗi hàng trong dữ liệu cung cấp thông tin liên quan về bệnh nhân.
 
 Dữ liệu sử dụng để đưa ra dự đoán trong ứng dụng này có định dạng giống như sample data, và bạn có thể tải xuống sample data ở bên dưới.
 
 """)
-        df_sample_data = pd.read_csv("data/test_data.csv")
+        df_sample_data = pd.read_csv("data/test_example.csv")
         st.write("Sample data: ", df_sample_data)
         st_pandas_to_csv_download_link(
-            df_sample_data, file_name="sample_data.csv")
+            df_sample_data, file_name="test_example.csv")
 
     elif clf_name == 'Decision Tree':
         max_depth = st.sidebar.slider(
@@ -74,7 +72,9 @@ uploaded_file = st.file_uploader(
 X = pd.DataFrame()
 
 if uploaded_file is not None:
-    datasets = pd.read_csv(uploaded_file)
+    datasets = pd.read_csv(uploaded_file,index_col=0)
+    print('datasets')
+    print(datasets)
     X = datasets
 
 
@@ -94,7 +94,8 @@ def get_pred(clf_name):
         preds = decision_tree_with_max_depth.predict_proba(X)[:, 1]
 
         y_val_preds = decision_tree_with_max_depth.predict_proba(X_val)[:, 1]
-        acc = c_index(y_val.values, y_val_preds)
+        print(y_val)
+        acc = c_index(y_val, y_val_preds)
 
         label_preds = decision_tree_with_max_depth.predict(X)
         predicted = True
@@ -105,7 +106,7 @@ def get_pred(clf_name):
         preds = random_forest_hypertuning.predict_proba(X)[:, 1]
 
         y_val_preds = random_forest_hypertuning.predict_proba(X_val)[:, 1]
-        acc = c_index(y_val.values, y_val_preds)
+        acc = c_index(y_val, y_val_preds)
 
         label_preds = random_forest_hypertuning.predict(X)
         predicted = True
@@ -125,12 +126,12 @@ else:
         results = np.array([])
         for i in range(label_preds.size):
             if label_preds[i] == True:
-                results = np.append(results, 'Tử vong', axis=None)
+                results = np.append(results, 'Đột quỵ', axis=None)
             else:
-                results = np.append(results, 'Không tử vong', axis=None)
+                results = np.append(results, 'Không Đột quỵ', axis=None)
         y_risk = pd.DataFrame()
         y_risk.loc[:, 'Kết quả dự đoán'] = results
-        y_risk.loc[:, 'Xác suất tử vong'] = preds
+        y_risk.loc[:, 'Xác suất Đột quỵ'] = preds
         st.write(f'Mô hình đã lựa chọn để phân lớp : {classifier_name}')
         st.write(f'Kết quả dự đoán :', y_risk)
         st.sidebar.write(f'Độ chính xác: {round(acc*100, 2)}%')
