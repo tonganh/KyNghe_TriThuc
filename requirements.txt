@@ -7,5 +7,4 @@ matplotlib
 pydotplus
 graphviz
 shap
-itertools
 more-itertools
