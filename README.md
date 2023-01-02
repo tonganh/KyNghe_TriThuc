@@ -1,6 +1,6 @@
 # Tree-Based-Risk-Prediction
 
-Liên kết: https://docs.google.com/document/d/1qHjKRHPedF0VeUzpjWeCO5xtpNvG5ecTetsZl5xkgUI/edit?usp=sharing
+Liên kết: https://docs.google.com/document/d/1Lx5sLDXH7LIhN2q01FCrucnWelzzCQPJPaC_8DiaklI/edit#
 
 ### Preriquirements
 

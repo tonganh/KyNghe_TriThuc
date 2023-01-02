@@ -16,6 +16,8 @@ sys.path.insert(0, abspath(join(dirname(__file__), '..')))
 
 
 X_train, y_train, X_val, y_val = get_training_data()
+print('X_train')
+print(X_train)
 st.write("""
 # DỰ ĐOÁN KHẢ NĂNG BỆNH NHÂN CÓ NGUY CƠ BỊ ĐỘT QUỴ
 """)
@@ -72,7 +74,7 @@ uploaded_file = st.file_uploader(
 X = pd.DataFrame()
 
 if uploaded_file is not None:
-    datasets = pd.read_csv(uploaded_file,index_col=0)
+    datasets = pd.read_csv(uploaded_file, index_col=0)
     print('datasets')
     print(datasets)
     X = datasets
@@ -91,7 +93,11 @@ def get_pred(clf_name):
         decision_tree_with_max_depth = DecisionTreeClassifier(
             **params, random_state=42)
         decision_tree_with_max_depth.fit(X_train, y_train)
+        print('line 94')
+        print(X)
         preds = decision_tree_with_max_depth.predict_proba(X)[:, 1]
+        print('preds')
+        print(preds)
 
         y_val_preds = decision_tree_with_max_depth.predict_proba(X_val)[:, 1]
         print(y_val)
