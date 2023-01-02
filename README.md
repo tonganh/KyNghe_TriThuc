@@ -30,9 +30,29 @@ Install the requirements library in the `requirements.txt` file:
 pip install -r requirements.txt
 ```
 
+List library we use in this project:
+
+```
+lifelines
+numpy
+pandas
+sklearn
+seaborn
+matplotlib
+pydotplus
+graphviz
+shap
+more-itertools
+streamlit
+```
+
 To run project:
 
 ```
 cd app
 streamline run app.py
 ```
+
+# Note
+
+Khi cài đặt streamlit và sử dụng, ở phiên bản python 3.9.7 có thể gặp lỗi protocols, bạn có thể khắc phục bằng cách nâng cấp lên phiên bản 3.10.

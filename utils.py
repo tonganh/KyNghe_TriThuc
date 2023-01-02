@@ -12,8 +12,9 @@ def load_data_from_csv(threshold, test_size=0.2):
     # X = pd.read_csv('data/NHANESI_subset_X.csv', index_col=0)
     # y = np.array(pd.read_csv('data/NHANESI_subset_y.csv')['y'])
     # print(y)
-    
+
     X = pd.read_csv('data/train_example.csv', index_col=0)
+    print('line 17')
     print(X)
     y = np.array(pd.read_csv('data/train_yTrue.csv')['stroke'])
 
